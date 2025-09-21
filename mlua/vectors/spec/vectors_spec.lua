@@ -22,7 +22,7 @@ describe("Uses one-based indexes", function()
             vec:push(initial);
             vec:set(1, expected);
 
-            local _, value = vec:get(expected)
+            local _, value = vec:get(1);
 
             assert.are.equals(expected, value);
         end);
@@ -177,7 +177,7 @@ describe("set", function()
         local tested_index = 2;
 
         local vec = vector.new(len);
-        local succeed = vec:set(tested_index);
+        local succeed = vec:set(tested_index, false);
 
         assert.is.truthy(succeed);
     end);
@@ -187,7 +187,7 @@ describe("set", function()
         local tested_index = len + 1;
 
         local vec = vector.new(len);
-        local succeed = vec:set(tested_index);
+        local succeed = vec:set(tested_index, false);
 
         assert.is.falsy(succeed);
     end);
