@@ -96,14 +96,14 @@ end);
 describe("new", function()
     it("Creates an empty vector", function()
         local vec = vector.new();
-        assert.are.equals(0, vec:len());
+        assert.are.equals(0, #vec);
     end);
 
     it("Creates an array with the given size but padded with nils", function()
         local expected_len = 10;
         local vec = vector.new(expected_len);
 
-        assert.are.equals(expected_len, vec:len());
+        assert.are.equals(expected_len, #vec);
 
         for i = 1, expected_len, 1 do
             assert.are.equals(nil, vec[i]);
@@ -114,7 +114,7 @@ describe("new", function()
         local expected_len = 10;
         local vec = vector.new(expected_len, true);
 
-        assert.are.equals(expected_len);
+        assert.are.equals(expected_len, #vec);
 
         for i = 1, expected_len, 1 do
             assert.are.equals(true, vec[i]);
@@ -127,7 +127,7 @@ describe("of", function()
         local expecteds = { 0, 1, 2, 3 };
         local vec = vector.of(0, 1, 2, 3);
 
-        assert.are.equals(4, vec:len());
+        assert.are.equals(4, #vec);
 
         for i, _ in ipairs(expecteds) do
             assert.are.equals(expecteds[i], vec[i]);
@@ -222,7 +222,7 @@ describe("pop", function()
         local is_present, value = vec:pop();
 
         assert.is.falsy(is_present);
-        assert.are.equals(value);
+        assert.are.equals(nil, value);
     end);
 
     it("On a non-empty vector, returns a success and the last element of the vector", function()
@@ -275,7 +275,7 @@ describe("__index", function()
         local vec = vector.of(4, 6, 5, 7);
 
         assert.has.errors(function()
-            local _ = vec[#vec];
+            local _ = vec[#vec + 1];
         end);
     end);
 
@@ -330,6 +330,7 @@ describe("__len", function()
         local vec = vector.new();
 
         for expected_len = 1, max_tested_len, 1 do
+            vec:push(true);
             assert.are.equals(expected_len, #vec);
         end
     end);
@@ -339,6 +340,7 @@ describe("__len", function()
         local vec = vector.new(max_tested_len);
 
         for expected_len = max_tested_len, 0, 1 do
+            vec:pop();
             assert.are.equals(expected_len, #vec);
         end
     end);
@@ -362,6 +364,6 @@ describe("__eq", function()
         local expected = vector.of(4, 3, 2, 1);
         local vec = vector.of(1, 2, 3, 4);
 
-        assert.are.equals(expected, vec);
+        assert.are.not_equals(expected, vec);
     end);
 end)
