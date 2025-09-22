@@ -93,6 +93,104 @@ describe("Uses one-based indexes", function()
     end);
 end);
 
+describe("Supports negative indexes for \"reverse\" indexing", function()
+    describe("This means that -1 is the last element of the Vector", function()
+        it("In the \"get\" method", function()
+            local vec = vector.of(5, 6, 7, 8);
+
+            local _, last_value = vec:get(#vec);
+            local _, value = vec:get(-1);
+
+            assert.are.equals(last_value, value);
+        end);
+
+        it("In the \"set\" method", function()
+            local vec = vector.of(5, 6, 7, 8);
+            local new_value = 10;
+
+            vec:set(-1, new_value);
+            local _, last_value = vec:get(#vec);
+            local _, value = vec:get(-1);
+
+            assert.are.equals(last_value, value);
+            assert.are.equals(new_value, value);
+        end);
+
+        it("In the \"__index\" meta method", function()
+            local vec = vector.of(5, 6, 7, 8);
+
+            assert.has.no_errors(function()
+                local last_value = vec[#vec]
+                local value = vec[-1];
+                assert.are.equals(last_value, value);
+            end)
+        end);
+
+        it("In the \"__newindex\" meta method", function()
+            local vec = vector.of(5, 6, 7, 8);
+            local new_value = 20;
+
+            assert.has.no_errors(function()
+                vec[-1] = new_value;
+
+                local last_value = vec[#vec];
+                local value = vec[-1];
+
+                assert.are.equals(last_value, value);
+                assert.are.equals(new_value, value);
+            end)
+        end);
+    end);
+
+    describe("This means that -#vec is the first element of Vector", function()
+        it("In the \"get\" method", function()
+            local vec = vector.of(5, 6, 7, 8);
+
+            local _, first_value = vec:get(1);
+            local _, value = vec:get(- #vec);
+
+            assert.are.equals(first_value, value);
+        end);
+
+        it("In the \"set\" method", function()
+            local vec = vector.of(5, 6, 7, 8);
+            local new_value = 10;
+
+            vec:set(- #vec, new_value);
+            local _, first_value = vec:get(1);
+            local _, value = vec:get(- #vec);
+
+            assert.are.equals(first_value, value);
+            assert.are.equals(new_value, value);
+        end);
+
+        it("In the \"__index\" meta method", function()
+            local vec = vector.of(5, 6, 7, 8);
+
+            assert.has.no_errors(function()
+                local first_value = vec[1];
+                local value = vec[- #vec];
+
+                assert.are.equals(first_value, value);
+            end)
+        end);
+
+        it("In the \"__newindex\" meta method", function()
+            local vec = vector.of(5, 6, 7, 8);
+            local new_value = 20;
+
+            assert.has.no_errors(function()
+                vec[- #vec] = new_value;
+                local first_value = vec[1];
+                local value = vec[- #vec];
+
+                assert.are.equals(first_value, value)
+                assert.are.equals(new_value, value);
+            end)
+        end);
+    end);
+end)
+
 describe("new", function()
     it("Creates an empty vector", function()
         local vec = vector.new();

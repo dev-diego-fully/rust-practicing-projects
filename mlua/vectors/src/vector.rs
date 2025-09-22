@@ -63,7 +63,7 @@ impl LuaVector {
             idx if idx > len => None,
             idx if idx < -len => None,
             idx if idx > 0 => Some((idx - 1) as usize),
-            idx => Some((idx + len + 1) as usize),
+            idx => Some((idx + len) as usize),
         }
     }
 }
