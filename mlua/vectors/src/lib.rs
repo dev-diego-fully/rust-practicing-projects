@@ -19,6 +19,11 @@ fn vector(lua: &Lua) -> LuaResult<LuaTable> {
     Ok(module)
 }
 
+/// The implementation of the `mlua::LuaUserData` trait for `LuaVectorAdapter`.
+///
+/// This block links the Rust methods to the Lua runtime, making them callable
+/// from a Lua script. It defines methods that are accessed with `vector:method()`
+/// and meta-methods that are accessed via Lua operators like `vec[i]` or `vec == other`.
 impl LuaUserData for LuaVectorAdapter {
     fn add_methods<M: LuaUserDataMethods<Self>>(methods: &mut M) {
         methods.add_method("get", Self::get);
